@@ -1,0 +1,9 @@
+{
+  "name": "montys-heart",
+  "version": "1.0.0",
+  "dependencies": {
+    "remotelog": "x",
+    "restify": "x",
+    "async": "x"
+  }
+}
