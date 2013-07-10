@@ -4,6 +4,8 @@
   "dependencies": {
     "remotelog": "x",
     "restify": "x",
-    "async": "x"
+    "async": "x",
+    "moodle": "x",
+    "mongodb": "x"
   }
 }
