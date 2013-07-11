@@ -56,3 +56,78 @@ PUT /user
     "code": "DuplicateEntryError",
     "message": "Email address already in use."
 }
+
+
+--
+Packages
+This section explains you to handle with packages.
+--
+Foo
+GET /{code_language}/package/{package_name}
+< 200
+< Content-Type: application/json
+{
+    "language": "py",
+    "name": "test_package",
+    "releases": {
+        "2012-04-23T18:25:43.511Z": "1.0.1",
+        "2012-04-23T18:25:43.511Z": "1.0.2",
+        "2012-04-23T18:25:43.511Z": "1.1.0",
+        "2012-04-23T18:25:43.511Z": "1.1.1",
+        "2012-04-23T18:25:43.511Z": "1.1.4",
+        "2012-04-23T18:25:43.511Z": "1.1.5-beta4"
+    },
+    "last_stable": "1.1.4",
+    "copyright": "Respective Coder",
+    "owner": "Respective Coder <respect@owner.com>",
+    "contributors": [
+        "Marty Helper <marty@example.com>"
+    ],
+    "licence": "MIT",
+    "engines": {
+        "python":"<3"
+    },
+    "dependencies": {
+        "super_tool1":">=2.1.3",
+        "super_tool2":">=1.4.3",
+        "super_tool3":">=0.1"
+    },
+    "binaries": {
+        "test": "bin/test.py"
+    }
+    "prefer_global": true
+}
+
+
+Commit a package
+Mandatory fields are checked as follows:
+    username: ASCII chars and at least one char
+    password: All chars and at least 8 chars
+    email: valid email syntax
+PUT /{code_language}/package
+> Accept: application/json
+> Content-Type: application/json
+{
+    "username": "user"
+    "password": "plain_password"
+    "email": "your@email.com"
+}
+< 201
+< Content-Type: application/json
+{
+    "code": "OK"
+}
++++++
+< 400
+< Content-Type: application/json
+{
+    "code": "UserError",
+    "message": "Invalid*"
+}
++++++
+< 409
+< Content-Type: application/json
+{
+    "code": "DuplicateEntryError",
+    "message": "Email address already in use."
+}
