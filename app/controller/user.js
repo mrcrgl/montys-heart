@@ -73,7 +73,7 @@ exports.get = function(req, res, next) {
       delete userObject._id;
       delete userObject.password;
 
-      res.send(200, userObject);
+      res.send(200, {"code":"OK", "data":userObject});
       return next();
 
     });
@@ -111,7 +111,7 @@ exports.put = function(req, res, next) {
     User.findOne({email:values.email}, function(err, result) {
       if (result.isValid()) {
         log.error(err);
-        res.send(500, {"code":"DuplicateEntryError","message": "Email address already in use."});
+        res.send(409, {"code":"DuplicateEntryError","message": "Email address already in use."});
         return next();
       }
 
@@ -127,7 +127,7 @@ exports.put = function(req, res, next) {
         }
 
         log.info("Created user: '%s'", email);
-        res.send(200);
+        res.send(201, {code:"OK"});
         return next();
       });
     });
