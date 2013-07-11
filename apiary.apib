@@ -14,26 +14,45 @@ Profiles
 This section explains you to handle with profiles.
 --
 List products added into your shopping-cart. (comment block again in Markdown)
-GET /shopping-cart
+GET /user/:email@example.com
 < 200
 < Content-Type: application/json
-{ "items": [
-{ "url": "/shopping-cart/1", "product":"2ZY48XPZ", "quantity": 1, "name": "New socks", "price": 1.25 }
-] }
+{
+    "username":"example",
+    "email":"email@example.com",
+    "status":true
+}
 
 
-Save new products in your shopping cart
-POST /shopping-cart
+Create new user / Register
+Mandatory fields are checked as follows:
+    username: ASCII chars and at least one char
+    password: All chars and at least 8 chars
+    email: valid email syntax
+PUT /user
+> Accept: application/json
 > Content-Type: application/json
-{ "product":"1AB23ORM", "quantity": 2 }
+{
+    "username": "user"
+    "password": "plain_password"
+    "email": "your@email.com"
+}
 < 201
 < Content-Type: application/json
-{ "status": "created", "url": "/shopping-cart/2" }
-
-
--- Payment Resources --
-This resource allows you to submit payment information to process your *shopping cart* items
-POST /payment
-{ "cc": "12345678900", "cvc": "123", "expiry": "0112" }
-< 200
-{ "receipt": "/payment/receipt/1" }
+{
+    "code": "OK"
+}
++++++
+< 400
+< Content-Type: application/json
+{
+    "code": "UserError",
+    "message": "Invalid*"
+}
++++++
+< 409
+< Content-Type: application/json
+{
+    "code": "DuplicateEntryError",
+    "message": "Email address already in use."
+}
