@@ -5,8 +5,13 @@
  *
  */
 
-var App = require('../lib/app');
+var App = require('../lib/app'),
+  log = require('../lib/log').init(module, "Daemon");
 
 App.init(function(err) {
-  console.dir(err);
+  if (err) {
+    log.error(err);
+  }
+
+  log.info("Initialization done.");
 });

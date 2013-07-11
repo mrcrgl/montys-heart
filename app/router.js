@@ -8,7 +8,7 @@
 
 exports.init = function(app, callback) {
 
-  var controllerProject = require('./controller/project'),
+  var controllerPackage = require('./controller/package'),
     controllerUser = require('./controller/user'),
     controllerCompany = require('./controller/company');
 
@@ -16,6 +16,10 @@ exports.init = function(app, callback) {
   app.get('/user/:email', controllerUser.get);
   app.put('/user', controllerUser.put);
   app.del('/user/:email', controllerUser.del);
+
+  app.get('/:language/package/:name', controllerPackage.get);
+  app.put('/:language/package', controllerPackage.put);
+  app.del('/:language/package/:name', controllerPackage.del);
 
   callback();
 

@@ -6,6 +6,7 @@
     "restify": "x",
     "async": "x",
     "moodle": "x",
-    "mongodb": "x"
+    "mongodb": "x",
+    "semver": "x"
   }
 }

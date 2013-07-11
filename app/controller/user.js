@@ -71,6 +71,7 @@ exports.get = function(req, res, next) {
 
       var userObject = user.toJSON();
       delete userObject._id;
+      delete userObject.password;
 
       res.send(200, userObject);
       return next();
