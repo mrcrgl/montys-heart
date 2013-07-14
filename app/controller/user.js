@@ -83,6 +83,8 @@ exports.get = function(req, res, next) {
 
 exports.put = function(req, res, next) {
 
+  log.info(req.params);
+
   var username, password, email, errors = [];
 
   async.parallel({
@@ -104,14 +106,16 @@ exports.put = function(req, res, next) {
   },
   function(err, values) {
     if (err) {
+      log.info("Registration failed. InputError: %s", err);
       res.send(400, {"code":"UserError", "message": err});
       return next();
     }
 
     User.findOne({email:values.email}, function(err, result) {
       if (result.isValid()) {
-        log.error(err);
-        res.send(409, {"code":"DuplicateEntryError","message": "Email address already in use."});
+        var message = "Email address already in use.";
+        log.info("Registration failed. Reason: %s", message);
+        res.send(409, {code:"DuplicateEntryError",message: message});
         return next();
       }
 
@@ -126,7 +130,7 @@ exports.put = function(req, res, next) {
           return next();
         }
 
-        log.info("Created user: '%s'", email);
+        log.info("Created user: '%s'", values.email);
         res.send(201, {code:"OK"});
         return next();
       });
@@ -138,5 +142,14 @@ exports.put = function(req, res, next) {
 
 exports.del = function(req, res, next) {
   res.send(204);
+  return next();
+};
+
+exports.auth = function(req, res, next) {
+  if (req.user && req.user.isValid()) {
+    res.send(200, {code:"OK"});
+    return next();
+  }
+  res.send(401, {code:"AuthenticationError",message:"Login required."});
   return next();
 };

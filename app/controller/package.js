@@ -100,11 +100,70 @@ var validators = {
     return cb("ErrorInvalidVersion");
   },
   data: function(params, cb) {
-
+    cb();
   }
 };
 
 exports.get = function (req, res, next) {
+
+};
+
+exports.putVerify = function (req, res, next) {
+  var user = req.user;
+
+  if (!user.isValid()) {
+    res.send(401, {code:"AuthenticationError",message:"Login required."});
+    return next();
+  }
+
+  async.parallel({
+    language: function(cb) { validators.language(req.params, cb) },
+    name: function(cb) { validators.name(req.params, cb) },
+    copyright: function(cb) { validators.copyright(req.params, cb) },
+    owner: function(cb) { validators.owner(req.params, cb) },
+    engines: function(cb) { validators.engines(req.params, cb) },
+    licence: function(cb) { validators.licence(req.params, cb) },
+    public: function(cb) { validators.public(req.params, cb) },
+    dependencies: function(cb) { validators.dependencies(req.params, cb) },
+    contributors: function(cb) { validators.contributors(req.params, cb) },
+    binaries: function(cb) { validators.binaries(req.params, cb) },
+    prefer_global: function(cb) { validators.prefer_global(req.params, cb) },
+    version: function(cb) { validators.version(req.params, cb) },
+    data: function(cb) { validators.data(req.params, cb) }
+  }, function (err, values) {
+
+    if (err) {
+      res.send(400, {"code": "UserError", "message": err});
+      return next();
+    }
+
+    Package.findOne({name: values.name}, function (err, pckg) {
+      if (err) {
+        log.error(err);
+        res.send(500, {"code": "InternalError", "message": err});
+        return next();
+      }
+
+      if (pckg.isValid()) {
+        // Update/New Version
+
+        // TODO: Check version, must be greater than current
+
+        if (pckg.user_id() !== user._id()) {
+          res.send(409, {"code": "DuplicateEntryError", "message": "Package named '" + values.name + "' already exists."});
+          return next();
+        }
+
+      }
+
+      //values.user_id = user._id();
+
+      res.send(200, {code: "OK"});
+      return next();
+    });
+
+
+  });
 
 };
 
@@ -113,7 +172,7 @@ exports.put = function (req, res, next) {
   var user = req.user;
 
   if (!user.isValid()) {
-    res.send(401);
+    res.send(401, {code:"AuthenticationError",message:"Login required."});
     return next();
   }
 
@@ -196,3 +255,4 @@ exports.put = function (req, res, next) {
 exports.del = function (req, res, next) {
 
 };
+

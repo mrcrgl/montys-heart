@@ -13,11 +13,14 @@ exports.init = function(app, callback) {
     controllerCompany = require('./controller/company');
 
 
+  app.get('/user/auth', controllerUser.auth);
   app.get('/user/:email', controllerUser.get);
   app.put('/user', controllerUser.put);
   app.del('/user/:email', controllerUser.del);
 
+
   app.get('/:language/package/:name', controllerPackage.get);
+  app.put('/:language/package/verify', controllerPackage.putVerify);
   app.put('/:language/package', controllerPackage.put);
   app.del('/:language/package/:name', controllerPackage.del);
 
