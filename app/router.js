@@ -19,9 +19,10 @@ exports.init = function(app, callback) {
   app.del('/user/:email', controllerUser.del);
 
 
-  app.get('/:language/package/:name', controllerPackage.get);
+
   app.put('/:language/package/verify', controllerPackage.putVerify);
-  app.put('/:language/package', controllerPackage.put);
+  app.put('/:language/package/commit', controllerPackage.put);
+  app.get('/:language/package/:name', controllerPackage.get);
   app.del('/:language/package/:name', controllerPackage.del);
 
   callback();
